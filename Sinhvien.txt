@@ -1,3 +1,0 @@
-1234,aad,asdas,3.000000
-443,adasdad,asdasd,8.000000
-123,adasd,adas,10.000000
