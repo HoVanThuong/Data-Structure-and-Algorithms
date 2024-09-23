@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
 #include <malloc.h>
+#include <bits/stdc++.h>
 typedef struct Node{
 	int data;
 	Node* link;
@@ -165,15 +165,124 @@ void Separating_List(List &L, List &L1, int x)
 	L = L2;
 	}
 }
+
+// Chen x vao vi tri ma gia tri ben phai nho hon x
+void InsertX(List &L, int x)
+{
+	Node* temp = L.first;
+	if(temp == NULL || temp->data < x)
+	{
+		InsertFirst(L, x);
+	}
+	else
+	{
+		while(temp->link != NULL)
+		{
+			if (temp->link->data < x)
+			{
+				Node* newNode = GetNode(x);
+				newNode->link = temp->link;
+				temp->link = newNode;
+				return;
+			}
+			temp = temp->link;
+		}
+		InsertLast(L, x);
+	}
+}
+
+void chuyenList(List &L)
+{
+	if (L.first ==NULL)
+		return;
+	L.last->link  = L.first;
+}
+bool check(List L)
+{
+	if(L.first == NULL)
+		return false;
+	return L.first == L.last->link;
+}
+
+void inV2(List L)
+{
+	Node *temp = L.first;
+	do{
+		std::cout<< temp->data << ' ';
+		temp = temp->link;
+	}while(temp != NULL);
+}
+
+int removeHead (List &L)
+{
+if (L.first == NULL) return 0;
+Node* p = L.first;
+L.first = p->link;
+if (L.first == NULL) L.last = NULL; //Nếu danh sách sau khi xóa là rỗng
+delete p;
+return 1;
+}
+
+
+int removeAfter (List &L, Node *q )
+{
+if (q !=NULL && q->link !=NULL)
+{
+Node* p = q->link;
+q->link = p->link;
+if (p == L.last) L.last = q;
+delete p;
+return 1;
+}
+else return 0;
+}
+
+
+int removeNode (List &L, int k) 
+{
+	Node *p = L.first; 
+	Node *q = NULL; 
+	while (p != NULL) 
+	{ 
+		if (p->data == k) break; 
+		q = p; 
+		p = p->link; 
+	} 
+	if (p == NULL) { std::cout<<"Not Found"; return 0;}
+	else if (q != NULL) 
+	{ 	
+		if(p == L.last) L.last = q; 
+		q->link= p->link; 
+		delete p; 
+		} 
+
+		else //p là phần tử đầu xâu 
+	{ 
+	L.first = p->link; 
+	if (L.first == NULL) L.last = NULL; //ds có 1phần tử
+	} 
+	return 1; 
+}
+
 int main()
 {
 	List L, L1;
 	Init(L);
-	Init(L1);
+	//Init(L1);
 	//CreateListFirst(L);
-	//CreateListLast(L);
+	CreateListLast(L);
 	PrintList(L);
 	printf("\n");
+	chuyenList(L);
+	if(check(L))
+	{
+		std::cout<< "Thanh Cong" << std::endl;
+	}
+	else
+	{
+		std::cout<<"ThatBai" << std::endl;
+	}
+	inV2(L);
 //	printf("Tong chan la: %ld \n", SumEvenNumber(L));
 //	if (SearchNode(L, 8) != NULL)
 //	{
@@ -184,10 +293,14 @@ int main()
 //	{
 //		printf("Khong tim thay \n");
 //	}
-	Separating_List(L, L1, 5);
-	PrintList(L);
-	printf("\n");
-	printf("L1 la:\n");
-	PrintList(L1);
-	
+//	Separating_List(L, L1, 5);
+//	PrintList(L);
+//	printf("\n");
+//	printf("L1 la:\n");
+//	PrintList(L1);
+//	std::cout << "Nhap x muon chen:";
+//	int x;
+//	std::cin >> x;
+//	InsertX(L, x);
+//	PrintList(L);
 }
