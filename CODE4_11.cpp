@@ -222,11 +222,110 @@ void xuatDuongDi(Tree T)
 		return;
 	}
 }
+
+
+int soNodeChanMucK(Tree T, int muc)
+{
+	if(T == NULL || muc < 0)
+		return 0;
+	if(muc == 0)
+	{
+		if(T->data % 2 == 0)
+			return 1;
+		return 0;
+	}
+	return soNodeChanMucK(T->left, muc--) + soNodeChanMucK(T->right,muc--);
+}
+
+
+void inNodeMucMot(Tree T)
+{
+	if(T == NULL)
+		return;
+	if((T->right == NULL && T->left != NULL) ||((T->right != NULL && T->left == NULL)) )
+	{
+		cout << T->data << ' ';
+	}
+	inNodeMucMot(T->left);
+	inNodeMucMot(T->right);
+}
+
+// Node chan muc 1 va la chan be nhat
+void nodeChanMucMotBeNhat(Tree T)
+{
+	if(T == NULL)
+		return;
+	int min = INT_MAX;
+	queue <Tree> q;
+	q.push(T);
+	while(!q.empty())
+	{
+		Node* curent = q.front();
+		q.pop();
+		if((curent->data % 2 == 0) && ((curent->right == NULL && curent->left != NULL) || (curent->right != NULL && curent->left == NULL)))
+			if(curent->data < min)
+				min = curent->data;
+		if(curent->left != NULL)	q.push(curent->left);
+		if(curent->right != NULL) q.push(curent->right);	
+	}
+	Node* nodeMin = timNode(T, min);
+	cout << "Gia tri: " << nodeMin->data << ' ' << "Muc: " << timBac(nodeMin) << "Hang: " << timHang(T, nodeMin, 0) << endl;
+}
+
+
+void xuatDuongDiMax(Tree T)
+{
+	if(T == NULL)
+		return;
+	int max = INT_MIN;
+	queue <Tree> q;
+	q.push(T);
+	while(!q.empty())
+	{
+		Node* curent = q.front();
+		q.pop();
+		if(curent->data > max)
+			max = curent->data;
+		if(curent->left != NULL)	q.push(curent->left);
+		if(curent->right != NULL) q.push(curent->right);	
+	}
+	if(max != INT_MIN)
+	{
+		while(T != NULL)
+		{
+			if(max > T->data)
+			{
+				cout << T->data << " -> ";
+				T = T->right;
+			}
+			else
+				if(max < T->data)
+					{
+						cout << T->data << " -> ";
+						T = T->left;
+					}	
+				else
+				{
+					cout << max ;
+					return;
+				}
+		}
+	}
+	else
+	{
+		return;
+	}
+}
 int main()
 {
 	char filename[] = "test.txt";
 	Tree T;
 	createTree(filename, T);
 	cout << endl;
-	xuatDuongDi(T);
+	//xuatDuongDi(T);
+	//cout << "So Node Chan Muc K: " <<  soNodeChanMucK(T, 2);
+	//inNodeMucMot(T);
+	nodeChanMucMotBeNhat(T);
+	cout << endl;
+	xuatDuongDiMax(T);
 }
